@@ -1,3 +1,0 @@
-[02:18:52] SYSTEM: Smart Agriculture System Initializing...
-[02:18:52] SYSTEM: Initialization complete.
-[02:19:08] Simulation: Simulation stopped.

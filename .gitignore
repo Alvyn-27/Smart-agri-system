@@ -1,1 +1,4 @@
 bin/
+target/
+*.log
+smart_agri_log.txt
