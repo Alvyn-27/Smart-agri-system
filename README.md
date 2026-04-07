@@ -1,137 +1,26 @@
-# 🌱 SmartAgri Monitoring System
+# 🌱 SmartAgri Monitoring System (Java & Rust Editions)
 
-A Java-based smart agriculture simulation that monitors farm conditions through virtual sensors and automates irrigation and shade control based on configurable thresholds.
+A dual-architecture smart agriculture simulation that monitors farm conditions through virtual sensors and automates irrigation and shade control. 
+
+This repository contains two complete implementations of the system:
+1. **Original Java Implementation:** A traditional Object-Oriented design utilizing threaded `TimerTasks`.
+2. **High-Performance Rust Rewrite:** A modernized, asynchronous streaming engine utilizing `tokio` and thread-safe concurrency (`Arc<Mutex<T>>`).
 
 ---
 
 ## 📁 Project Structure
 
-```
+```text
 SmartAgri/
-└── src/
-    ├── main.java
-    └── com/smartagri/
-        ├── sensors/
-        │   ├── TemperatureSensor.java
-        │   ├── SoilMoistureSensor.java
-        │   ├── HumiditySensor.java
-        │   └── LightSensor.java
-        ├── irrigation_shade/
-        │   ├── IrrigationSystem.java
-        │   └── ShadeSystem.java
-        ├── core/
-        │   ├── MonitoringSystem.java
-        │   └── FileLogger.java
-        └── users/
-            ├── User.java
-            ├── AuthenticationService.java
-            └── AuthenticationException.java
-```
-
----
-
-## ⚙️ How It Works
-
-### Startup
-1. The `Connector` wires all sensors, actuators, logger, and authentication together.
-2. The user is prompted to log in (up to 3 attempts).
-3. On successful login, the background monitoring timer starts — scanning sensors every **10 seconds**.
-4. The user is shown a role-based menu to interact with the system.
-5. On logout, the timer stops and all logs are saved to `smartagri_log.txt`.
-
-### Automatic Actions (MonitoringSystem)
-| Condition | Action |
-|---|---|
-| Soil moisture < 30% | Irrigation turns **ON** |
-| Soil moisture ≥ 30% | Irrigation turns **OFF** |
-| Temperature > 35°C or Light > 7000 lux | Shade turns **ON** |
-| Temperature ≤ 35°C and Light ≤ 7000 lux | Shade turns **OFF** |
-
----
-
-## 📦 Package Descriptions
-
-### `main.java`
-The application entry point. Contains two inner classes:
-- **MenuManager** — handles the login screen and displays the correct menu based on user role (Admin, Farmer, or Agronomist).
-- **Connector** — wires all components (sensors, actuators, users, monitoring system) together so they can communicate.
-
-### `com.smartagri.sensors`
-Four sensor classes that simulate real hardware by generating random values within realistic ranges.
-
-| Class | Simulated Range |
-|---|---|
-| `TemperatureSensor` | 15°C – 45°C |
-| `SoilMoistureSensor` | 10% – 90% |
-| `HumiditySensor` | 20% – 95% |
-| `LightSensor` | 100 – 10,000 lux |
-
-### `com.smartagri.irrigation_shade`
-Two actuator classes that can be switched ON or OFF, either automatically by the MonitoringSystem or manually by a Farmer.
-- **IrrigationSystem** — controls water delivery to plants.
-- **ShadeSystem** — deploys or retracts shade covers.
-
-### `com.smartagri.core`
-- **MonitoringSystem** — reads all sensors on a 10-second timer, evaluates thresholds, and triggers actuators automatically.
-- **FileLogger** — writes timestamped log entries (logins, sensor readings, actions, errors) to `smartagri_log.txt`.
-
-### `com.smartagri.users`
-- **User** — represents a system user with a username and one of three roles: `ADMIN`, `FARMER`, or `AGRONOMIST`.
-- **AuthenticationService** — validates login credentials against the user list and returns the authenticated `User`.
-- **AuthenticationException** — thrown when a login attempt fails, carrying a descriptive error message.
-
----
-
-## 👤 User Roles & Menus
-
-| Role | Permissions |
-|---|---|
-| **Admin** | View sensors, view actuators, trigger manual scan, view system info |
-| **Farmer** | View sensors, manually control irrigation and shade, view actuators |
-| **Agronomist** | View sensors and actuator status (read-only) |
-
-### Default Credentials
-| Username | Password | Role |
-|---|---|---|
-| `admin` | `admin123` | Admin |
-| `farmer1` | `farm123` | Farmer |
-| `agro1` | `agro123` | Agronomist |
-
----
-
-## 🚀 How to Run
-
-### Prerequisites
-- Java JDK 17 or higher
-
-### Compile
-```bash
-cd SmartAgri/src
-javac -d ../out $(find . -name "*.java")
-```
-
-### Run
-```bash
-cd SmartAgri/out
-java main
-```
-
-### Log Output
-All events are saved to `smartagri_log.txt` in the working directory. Example:
-```
-[2025-06-01 10:00:00] [SYSTEM]  SmartAgri system starting up …
-[2025-06-01 10:00:01] [AUTH]    Login attempt by 'farmer1': SUCCESS
-[2025-06-01 10:00:10] [MONITOR] --- Auto-scan started ---
-[2025-06-01 10:00:10] [SENSOR]  SoilMoistureSensor reading: 24.30 %
-[2025-06-01 10:00:10] [ACTION]  MonitoringSystem -> Irrigation ON — moisture 24.3% < threshold 30.0%
-[2025-06-01 10:00:10] [MONITOR] --- Auto-scan complete ---
-```
-
----
-
-## 🔮 Potential Extensions
-- Connect to real hardware sensors via serial/GPIO
-- Add a database backend to store historical sensor data
-- Build a web or GUI dashboard for remote monitoring
-- Add email/SMS alerts when thresholds are breached
-- Support additional roles (e.g., Supervisor) with custom permissions
+├── src/                        <-- Original Java OOP Implementation
+│   ├── main.java
+│   └── com/smartagri/
+│       ├── sensors/            (Temperature, Moisture, Humidity, Light)
+│       ├── irrigation_shade/   (Irrigation & Shade Actuators)
+│       ├── core/               (MonitoringSystem & FileLogger)
+│       └── users/              (Auth Service & Role Management)
+│
+└── smart-agri-rust/            <-- High-Performance Rust Async Engine
+    ├── Cargo.toml
+    └── src/
+        └── main.rs             (Unified async engine, traits, and simulation loop)
