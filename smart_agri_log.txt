@@ -1,0 +1,8 @@
+[20:49:11] SYSTEM: Smart Agriculture System Initializing...
+[20:49:11] SYSTEM: Registered sensor: T1
+[20:49:11] SYSTEM: Registered sensor: M1
+[20:49:11] SYSTEM: Registered sensor: H1
+[20:49:11] SYSTEM: Registered sensor: L1
+[20:49:11] SYSTEM: Registered actuator: IRR-MAIN
+[20:49:11] SYSTEM: Registered actuator: SHD-MAIN
+[20:49:11] SYSTEM: Initialization complete.

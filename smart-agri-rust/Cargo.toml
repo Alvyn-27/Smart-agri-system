@@ -1,0 +1,9 @@
+[package]
+name = "smart_agri_system"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tokio = { version = "1.35", features = ["full"] }
+rand = "0.8.5"
+chrono = "0.4.31" # For exact timestamp matching in the logger
